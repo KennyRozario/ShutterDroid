@@ -7,6 +7,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 
 /**
  * Created by Kenny on 15-07-01.
@@ -27,6 +28,26 @@ public class ShutterStock {
     private static final ShutterStockService SERVICE = ADAPTER.create(ShutterStockService.class);
 
     public void search (String query, Callback<List<Image>> cb){
+        SERVICE.search(query, new ImageCallback(cb));
+    }
 
+    public static void getRecent(String date, Callback<List<Image>> cb){
+        SERVICE.getRecent(date, new ImageCallback(cb));
+    }
+
+    private static class ImageCallback implements Callback<Response>{
+        Callback<List<Image>> cb;
+        ImageCallback(Callback<List<Image>> cb){
+            this.cb = cb;
+        }
+        @Override
+        public void success(Response response, retrofit.client.Response response2) {
+            cb.success(response.data, response2);
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            cb.failure(error);
+        }
     }
 }
