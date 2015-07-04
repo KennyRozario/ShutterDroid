@@ -1,5 +1,6 @@
 package com.example.kenny.shutterdroid;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 
 import com.example.kenny.shutterdroid.api.Image;
 import com.example.kenny.shutterdroid.api.ShutterStock;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;
@@ -27,8 +29,10 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     }
 
     private List<Image> mImages;
+    private Context mContext;
 
-    public ImagesAdapter(List<Image> images) {
+    public ImagesAdapter(Context context, List<Image> images) {
+        mContext = context;
         mImages = images;
     }
 
@@ -42,10 +46,11 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         Image image = mImages.get(i);
+        Picasso.with(mContext).load(image.getLargeThumb()).into(viewHolder.mImageView);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mImages.size();
     }
 }
